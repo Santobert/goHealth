@@ -8,25 +8,27 @@ import (
 	"github.com/shirou/gopsutil/v4/cpu"
 )
 
-type CPUUsage struct {
-	UsagePercent []float64 `json:"usage_percent"`
+type CpuUsage struct {
+	UsagePercent float64 `json:"usage_percent"`
 }
 
-func getCpuUsage() ([]float64, error) {
+func getCpuUsage() (*CpuUsage, error) {
 	percentages, err := cpu.Percent(time.Second, false)
 	if err != nil {
 		return nil, err
 	}
-	return percentages, nil
+	return &CpuUsage{
+		UsagePercent: percentages[0],
+	}, nil
 }
 
 func CpuUsageHandler(w http.ResponseWriter, r *http.Request) {
-	percentages, err := getCpuUsage()
+	cpu, err := getCpuUsage()
 	if err != nil {
-		http.Error(w, "Fehler beim Abrufen der CPU-Auslastung", http.StatusInternalServerError)
+		http.Error(w, "Error retrieving CPU usage information", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(percentages)
+	json.NewEncoder(w).Encode(cpu)
 }

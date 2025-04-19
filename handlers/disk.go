@@ -32,11 +32,16 @@ func getDiskUsage(path string) (*DiskUsage, error) {
 
 func DiskUsageHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	if vars["path"] == "" {
+		http.Redirect(w, r, "/disk/_", http.StatusMovedPermanently)
+		return
+	}
+
 	path := strings.ReplaceAll(vars["path"], "_", "/")
 
 	usage, err := getDiskUsage(path)
 	if err != nil {
-		http.Error(w, "Fehler beim Abrufen der Festplattenauslastung", http.StatusInternalServerError)
+		http.Error(w, "Error retrieving disk usage information", http.StatusInternalServerError)
 		return
 	}
 
