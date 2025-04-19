@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Santobert/gohealth/config"
 	"github.com/gorilla/mux"
 	"github.com/shirou/gopsutil/v4/disk"
 )
@@ -23,8 +24,9 @@ func getDiskUsage(path string) (*DiskUsage, error) {
 		return nil, err
 	}
 
+	healthy := usage.UsedPercent < config.AppConfig.MaxDisk
 	return &DiskUsage{
-		Healthy:     usage.UsedPercent < 90,
+		Healthy:     healthy,
 		Total:       usage.Total,
 		Used:        usage.Used,
 		Free:        usage.Free,

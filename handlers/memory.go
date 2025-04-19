@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Santobert/gohealth/config"
 	"github.com/shirou/gopsutil/v4/mem"
 )
 
@@ -21,8 +22,10 @@ func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	memHealthy := memoryUsage.UsedPercent < config.AppConfig.MaxMemory
+	swapHealty := swapUsage.UsedPercent < config.AppConfig.MaxSwap
 	memMsg := MemoryUsage{
-		Healthy:      memoryUsage.UsedPercent < 90 && swapUsage.UsedPercent < 90,
+		Healthy:      memHealthy && swapHealty,
 		UsagePercent: memoryUsage.UsedPercent,
 		SwapPercent:  swapUsage.UsedPercent,
 	}

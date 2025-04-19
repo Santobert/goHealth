@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Santobert/gohealth/config"
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/load"
 )
@@ -23,8 +24,9 @@ func LoadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	healthy := loadHealthy(load.Load1, cpus) && loadHealthy(load.Load5, cpus) && loadHealthy(load.Load15, cpus)
 	loadMsg := Load{
-		Healthy: load.Load1 < float64(cpus) && load.Load5 < float64(cpus) && load.Load15 < float64(cpus),
+		Healthy: healthy,
 		Load1:   load.Load1,
 		Load5:   load.Load5,
 		Load15:  load.Load15,
@@ -32,4 +34,8 @@ func LoadHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(&loadMsg)
+}
+
+func loadHealthy(load float64, cpus int) bool {
+	return load/float64(cpus) < config.AppConfig.MaxLoad
 }

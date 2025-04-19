@@ -1,0 +1,4 @@
+max_load: 1
+max_memory: 90
+max_swap: 90
+max_disk: 90
