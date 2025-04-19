@@ -16,6 +16,6 @@ func main() {
 	r.HandleFunc("/load", handlers.LoadHandler).Methods("GET")
 	r.HandleFunc("/memory", handlers.MemoryUsageHandler).Methods("GET")
 
-	fmt.Println("Server läuft auf Port 8080...")
-	http.ListenAndServe(":8080", r)
+	fmt.Println("Server läuft auf Port 9100...")
+	http.ListenAndServe(":9100", r)
 }
