@@ -10,6 +10,7 @@ import (
 )
 
 type DiskUsage struct {
+	Healthy     bool    `json:"healthy"`
 	Total       uint64  `json:"total"`
 	Used        uint64  `json:"used"`
 	Free        uint64  `json:"free"`
@@ -23,6 +24,7 @@ func getDiskUsage(path string) (*DiskUsage, error) {
 	}
 
 	return &DiskUsage{
+		Healthy:     usage.UsedPercent < 90,
 		Total:       usage.Total,
 		Used:        usage.Used,
 		Free:        usage.Free,
@@ -38,7 +40,6 @@ func DiskUsageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path := strings.ReplaceAll(vars["path"], "_", "/")
-
 	usage, err := getDiskUsage(path)
 	if err != nil {
 		http.Error(w, "Error retrieving disk usage information", http.StatusInternalServerError)

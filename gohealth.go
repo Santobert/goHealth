@@ -12,7 +12,6 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/disk/?", handlers.DiskUsageHandler).Methods("GET")
 	r.HandleFunc("/disk/{path}", handlers.DiskUsageHandler).Methods("GET")
-	r.HandleFunc("/cpu", handlers.CpuUsageHandler).Methods("GET")
 	r.HandleFunc("/load", handlers.LoadHandler).Methods("GET")
 	r.HandleFunc("/memory", handlers.MemoryUsageHandler).Methods("GET")
 
