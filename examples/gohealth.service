@@ -1,0 +1,14 @@
+[Unit]
+Description=goHealth API Service
+After=network.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+Type=simple
+ExecStart=/usr/local/bin/gohealth/goHealth -config /etc/gohealth/config.yaml
+User=gohealth
+Group=gohealth
+
+[Install]
+WantedBy=multi-user.target
