@@ -19,7 +19,7 @@ To use **goHealth**, follow these steps:
    Execute the binary with the following command-line parameters:
 
    ```bash
-   ./goHealth -config /path/to/config.yaml -port 8080
+   ./goHealth -config /path/to/config.yaml -port 9100
    ```
 
    - `-config`: Specifies the path to the configuration file (default is `config.yaml` in your current directory)
