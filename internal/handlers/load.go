@@ -16,6 +16,10 @@ type Load struct {
 	Load15  float64 `json:"load15"`
 }
 
+func isLoadHealthy(load float64, cpus int) bool {
+	return load/float64(cpus) < config.AppConfig.Load.MaxLoad
+}
+
 func LoadHandler(w http.ResponseWriter, r *http.Request) {
 	load, err := load.Avg()
 	cpus, cpuErr := cpu.Counts(true)
@@ -24,7 +28,7 @@ func LoadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	healthy := loadHealthy(load.Load1, cpus) && loadHealthy(load.Load5, cpus) && loadHealthy(load.Load15, cpus)
+	healthy := isLoadHealthy(load.Load1, cpus) && isLoadHealthy(load.Load5, cpus) && isLoadHealthy(load.Load15, cpus)
 	loadMsg := Load{
 		Healthy: healthy,
 		Load1:   load.Load1,
@@ -34,8 +38,4 @@ func LoadHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(&loadMsg)
-}
-
-func loadHealthy(load float64, cpus int) bool {
-	return load/float64(cpus) < config.AppConfig.MaxLoad
 }

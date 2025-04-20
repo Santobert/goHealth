@@ -7,21 +7,41 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Config struct {
-	MaxLoad   float64 `yaml:"max_load,omitempty"`
+type LoadConfig struct {
+	MaxLoad float64 `yaml:"max_load,omitempty"`
+}
+
+type MemoryConfig struct {
 	MaxMemory float64 `yaml:"max_memory,omitempty"`
 	MaxSwap   float64 `yaml:"max_swap,omitempty"`
-	MaxDisk   float64 `yaml:"max_disk,omitempty"`
+}
+
+type DiskConfig struct {
+	MaxDisk float64  `yaml:"max_disk,omitempty"`
+	Paths   []string `yaml:"paths,omitempty"`
+}
+
+type Config struct {
+	Load   LoadConfig   `yaml:"load,omitempty"`
+	Memory MemoryConfig `yaml:"memory,omitempty"`
+	Disk   DiskConfig   `yaml:"disk,omitempty"`
 }
 
 var AppConfig Config
 
-func LoadConfig(filename string) {
+func ReadConfig(filename string) {
 	AppConfig = Config{
-		MaxLoad:   1,
-		MaxMemory: 90,
-		MaxSwap:   90,
-		MaxDisk:   90,
+		Load: LoadConfig{
+			MaxLoad: 1.0,
+		},
+		Memory: MemoryConfig{
+			MaxMemory: 90.0,
+			MaxSwap:   90.0,
+		},
+		Disk: DiskConfig{
+			MaxDisk: 90.0,
+			Paths:   []string{"/"},
+		},
 	}
 
 	if filename == "" {

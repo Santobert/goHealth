@@ -8,7 +8,6 @@ import (
 
 	"github.com/Santobert/gohealth/internal/config"
 	"github.com/Santobert/gohealth/internal/handlers"
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -16,16 +15,15 @@ func main() {
 	configFile := flag.String("config", "", "Configuration file")
 	flag.Parse()
 
-	config.LoadConfig(*configFile)
+	config.ReadConfig(*configFile)
 
-	r := mux.NewRouter()
-	r.HandleFunc("/disk/{path:.*}", handlers.DiskUsageHandler).Methods("GET")
-	r.HandleFunc("/load", handlers.LoadHandler).Methods("GET")
-	r.HandleFunc("/memory", handlers.MemoryUsageHandler).Methods("GET")
-	r.HandleFunc("/config", handlers.ConfigHandler).Methods("GET")
+	http.HandleFunc("/disk", handlers.DiskUsageHandler)
+	http.HandleFunc("/load", handlers.LoadHandler)
+	http.HandleFunc("/memory", handlers.MemoryUsageHandler)
+	http.HandleFunc("/config", handlers.ConfigHandler)
 
 	log.Printf("Server is running on port %d...\n", *port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", *port), r); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

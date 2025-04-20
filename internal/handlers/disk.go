@@ -2,30 +2,34 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-	"strings"
 
 	"github.com/Santobert/gohealth/internal/config"
-	"github.com/gorilla/mux"
 	"github.com/shirou/gopsutil/v4/disk"
 )
 
-type DiskUsage struct {
-	Healthy     bool    `json:"healthy"`
+type Partition struct {
+	Healthy     bool    `json:"-"`
 	Total       uint64  `json:"total"`
 	Used        uint64  `json:"used"`
 	Free        uint64  `json:"free"`
 	UsedPercent float64 `json:"used_percent"`
 }
 
-func getDiskUsage(path string) (*DiskUsage, error) {
+type DiskUsage struct {
+	Healthy bool                  `json:"healthy"`
+	Paths   map[string]*Partition `json:"paths"`
+}
+
+func getPartition(path string) (*Partition, error) {
 	usage, err := disk.Usage(path)
 	if err != nil {
 		return nil, err
 	}
 
-	healthy := usage.UsedPercent < config.AppConfig.MaxDisk
-	return &DiskUsage{
+	healthy := usage.UsedPercent < config.AppConfig.Disk.MaxDisk
+	return &Partition{
 		Healthy:     healthy,
 		Total:       usage.Total,
 		Used:        usage.Used,
@@ -34,20 +38,30 @@ func getDiskUsage(path string) (*DiskUsage, error) {
 	}, nil
 }
 
+func addPartitionUsage(diskUsage *DiskUsage, path string) error {
+	usage, err := getPartition(path)
+	if err != nil {
+		return err
+	}
+	diskUsage.Paths[path] = usage
+	diskUsage.Healthy = diskUsage.Healthy && usage.Healthy
+	return nil
+}
+
 func DiskUsageHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	if vars["path"] == "" {
-		http.Redirect(w, r, "/disk/_", http.StatusMovedPermanently)
-		return
+	diskUsage := &DiskUsage{
+		Healthy: true,
+		Paths:   make(map[string]*Partition),
 	}
 
-	path := strings.ReplaceAll(vars["path"], "_", "/")
-	usage, err := getDiskUsage(path)
-	if err != nil {
-		http.Error(w, "Error retrieving disk usage information", http.StatusInternalServerError)
-		return
+	// Handle all paths configured in the config
+	for _, path := range config.AppConfig.Disk.Paths {
+		if err := addPartitionUsage(diskUsage, path); err != nil {
+			log.Printf("Error retrieving disk usage for path %s: %v", path, err)
+			diskUsage.Paths[path] = nil
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(usage)
+	json.NewEncoder(w).Encode(&diskUsage)
 }

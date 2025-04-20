@@ -14,6 +14,14 @@ type MemoryUsage struct {
 	SwapPercent  float64 `json:"swap_percent"`
 }
 
+func isMemoryHealthy(value float64) bool {
+	return value < config.AppConfig.Memory.MaxMemory
+}
+
+func isSwapHealthy(value float64) bool {
+	return value < config.AppConfig.Memory.MaxSwap
+}
+
 func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 	memoryUsage, memErr := mem.VirtualMemory()
 	swapUsage, swapErr := mem.SwapMemory()
@@ -22,8 +30,8 @@ func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	memHealthy := memoryUsage.UsedPercent < config.AppConfig.MaxMemory
-	swapHealty := swapUsage.UsedPercent < config.AppConfig.MaxSwap
+	memHealthy := isMemoryHealthy(memoryUsage.UsedPercent)
+	swapHealty := isSwapHealthy(swapUsage.UsedPercent)
 	memMsg := MemoryUsage{
 		Healthy:      memHealthy && swapHealty,
 		UsagePercent: memoryUsage.UsedPercent,
