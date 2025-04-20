@@ -1,0 +1,12 @@
+load:
+  max_load: 0.9
+
+memory:
+  max_memory: 80.0
+  max_swap: 70.0
+
+disk:
+  max_disk: 60.0
+  paths:
+    - /
+    - /home
