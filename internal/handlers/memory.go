@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Santobert/gohealth/config"
+	"github.com/Santobert/gohealth/internal/config"
 	"github.com/shirou/gopsutil/v4/mem"
 )
 

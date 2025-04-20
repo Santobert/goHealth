@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Santobert/gohealth/config"
+	"github.com/Santobert/gohealth/internal/config"
 	"github.com/gorilla/mux"
 	"github.com/shirou/gopsutil/v4/disk"
 )

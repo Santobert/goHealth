@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Santobert/gohealth/config"
-	"github.com/Santobert/gohealth/handlers"
+	"github.com/Santobert/gohealth/internal/config"
+	"github.com/Santobert/gohealth/internal/handlers"
 	"github.com/gorilla/mux"
 )
 
