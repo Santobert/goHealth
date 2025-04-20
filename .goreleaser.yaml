@@ -1,0 +1,6 @@
+version: 2
+project_name: goHealth
+builds:
+  - env: [CGO_ENABLED=0]
+    targets: [go_first_class]
+    goos: [linux]
