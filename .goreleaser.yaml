@@ -2,5 +2,10 @@ version: 2
 project_name: goHealth
 builds:
   - env: [CGO_ENABLED=0]
-    targets: [go_first_class]
-    goos: [linux]
+    goos:
+      - linux
+    goarch:
+      - "386"
+      - amd64
+      - armv6
+      - arm64
