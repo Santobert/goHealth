@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/Santobert/gohealth/internal/config"
@@ -53,7 +52,6 @@ func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isSwapEnabled() {
-		fmt.Println("Swap is enabled")
 		if err := addSwapHealth(&memMsg); err != nil {
 			http.Error(w, "Failed to retrieve swap memory usage information", http.StatusInternalServerError)
 			return
