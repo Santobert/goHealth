@@ -12,8 +12,9 @@ type LoadConfig struct {
 }
 
 type MemoryConfig struct {
-	MaxMemory float64 `yaml:"max_memory,omitempty"`
-	MaxSwap   float64 `yaml:"max_swap,omitempty"`
+	MaxMemory   float64 `yaml:"max_memory,omitempty"`
+	MaxSwap     float64 `yaml:"max_swap,omitempty"`
+	SwapEnabled bool    `yaml:"swap_enabled,omitempty"`
 }
 
 type DiskConfig struct {
@@ -35,8 +36,9 @@ func ReadConfig(filename string) {
 			MaxLoad: 1.0,
 		},
 		Memory: MemoryConfig{
-			MaxMemory: 90.0,
-			MaxSwap:   90.0,
+			MaxMemory:   90.0,
+			MaxSwap:     90.0,
+			SwapEnabled: true,
 		},
 		Disk: DiskConfig{
 			MaxDisk: 90.0,

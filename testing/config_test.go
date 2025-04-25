@@ -13,8 +13,9 @@ func TestReadConfig_DefaultValues(t *testing.T) {
 			MaxLoad: 1.0,
 		},
 		Memory: config.MemoryConfig{
-			MaxMemory: 90.0,
-			MaxSwap:   90.0,
+			MaxMemory:   90.0,
+			MaxSwap:     90.0,
+			SwapEnabled: true,
 		},
 		Disk: config.DiskConfig{
 			MaxDisk: 90.0,
@@ -32,8 +33,9 @@ func TestReadConfig_FromFile(t *testing.T) {
 			MaxLoad: 0.9,
 		},
 		Memory: config.MemoryConfig{
-			MaxMemory: 80.0,
-			MaxSwap:   70.0,
+			MaxMemory:   80.0,
+			MaxSwap:     70.0,
+			SwapEnabled: false,
 		},
 		Disk: config.DiskConfig{
 			MaxDisk: 60.0,
