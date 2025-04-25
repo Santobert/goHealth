@@ -31,9 +31,9 @@ func addSwapHealth(memoryUsage *MemoryUsage) error {
 	if swapErr != nil {
 		return swapErr
 	}
-	swapHealty := isSwapHealthy(swapUsage.UsedPercent)
+	swapHealthy := isSwapHealthy(swapUsage.UsedPercent)
 	memoryUsage.SwapPercent = swapUsage.UsedPercent
-	memoryUsage.Healthy = memoryUsage.Healthy && swapHealty
+	memoryUsage.Healthy = memoryUsage.Healthy && swapHealthy
 	return nil
 }
 
