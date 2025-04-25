@@ -4,6 +4,7 @@ load:
 memory:
   max_memory: 90.0
   max_swap: 90.0
+  swap_enabled: true
 
 disk:
   max_disk: 80.0

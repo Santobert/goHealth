@@ -22,20 +22,40 @@ func isSwapHealthy(value float64) bool {
 	return value < config.AppConfig.Memory.MaxSwap
 }
 
+func isSwapEnabled() bool {
+	return config.AppConfig.Memory.SwapEnabled
+}
+
+func addSwapHealth(memoryUsage *MemoryUsage) error {
+	swapUsage, swapErr := mem.SwapMemory()
+	if swapErr != nil {
+		return swapErr
+	}
+	swapHealthy := isSwapHealthy(swapUsage.UsedPercent)
+	memoryUsage.SwapPercent = swapUsage.UsedPercent
+	memoryUsage.Healthy = memoryUsage.Healthy && swapHealthy
+	return nil
+}
+
 func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 	memoryUsage, memErr := mem.VirtualMemory()
-	swapUsage, swapErr := mem.SwapMemory()
-	if memErr != nil || swapErr != nil {
+	if memErr != nil {
 		http.Error(w, "Failed to retrieve memory usage information", http.StatusInternalServerError)
 		return
 	}
 
 	memHealthy := isMemoryHealthy(memoryUsage.UsedPercent)
-	swapHealty := isSwapHealthy(swapUsage.UsedPercent)
 	memMsg := MemoryUsage{
-		Healthy:      memHealthy && swapHealty,
+		Healthy:      memHealthy,
 		UsagePercent: memoryUsage.UsedPercent,
-		SwapPercent:  swapUsage.UsedPercent,
+		SwapPercent:  0,
+	}
+
+	if isSwapEnabled() {
+		if err := addSwapHealth(&memMsg); err != nil {
+			http.Error(w, "Failed to retrieve swap memory usage information", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
