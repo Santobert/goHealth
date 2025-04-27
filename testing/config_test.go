@@ -1,6 +1,7 @@
 package config
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/Santobert/gohealth/internal/config"
@@ -19,11 +20,15 @@ func TestReadConfig_DefaultValues(t *testing.T) {
 		},
 		Disk: config.DiskConfig{
 			MaxDisk: 90.0,
-			Paths:   []string{"/"},
+			Paths:   []string{},
+			Ignore:  []string{},
+			Auto:    true,
 		},
 	}
 
-	assertDefaultConfig(t, expectedConfig)
+	if !reflect.DeepEqual(config.AppConfig, expectedConfig) {
+		t.Errorf("Expected default config: %+v, got: %+v", expectedConfig, config.AppConfig)
+	}
 }
 
 func TestReadConfig_FromFile(t *testing.T) {
@@ -40,22 +45,12 @@ func TestReadConfig_FromFile(t *testing.T) {
 		Disk: config.DiskConfig{
 			MaxDisk: 60.0,
 			Paths:   []string{"/", "/home"},
+			Ignore:  []string{"/boot/efi"},
+			Auto:    false,
 		},
 	}
 
-	assertDefaultConfig(t, expectedConfig)
-}
-
-func assertDefaultConfig(t *testing.T, expectedConfig config.Config) {
-	if config.AppConfig.Load != expectedConfig.Load ||
-		config.AppConfig.Memory != expectedConfig.Memory ||
-		config.AppConfig.Disk.MaxDisk != expectedConfig.Disk.MaxDisk ||
-		len(config.AppConfig.Disk.Paths) != len(expectedConfig.Disk.Paths) {
-		t.Errorf("Expected config to be %+v, got %+v", expectedConfig, config.AppConfig)
-	}
-	for i, path := range expectedConfig.Disk.Paths {
-		if config.AppConfig.Disk.Paths[i] != path {
-			t.Errorf("Expected Paths[%d] to be %s, got %s", i, path, config.AppConfig.Disk.Paths[i])
-		}
+	if !reflect.DeepEqual(config.AppConfig, expectedConfig) {
+		t.Errorf("Expected default config: %+v, got: %+v", expectedConfig, config.AppConfig)
 	}
 }
