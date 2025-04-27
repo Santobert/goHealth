@@ -8,6 +8,7 @@ memory:
 
 disk:
   max_disk: 80.0
-  paths:
-    - /
-    - /home
+  paths: []
+  ignore:
+    - /boot/efi
+  auto: true
