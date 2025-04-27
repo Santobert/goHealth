@@ -11,3 +11,6 @@ disk:
   paths:
     - /
     - /home
+  ignore:
+    - /boot/efi
+  auto: false

@@ -20,6 +20,8 @@ type MemoryConfig struct {
 type DiskConfig struct {
 	MaxDisk float64  `yaml:"max_disk,omitempty"`
 	Paths   []string `yaml:"paths,omitempty"`
+	Ignore  []string `yaml:"ignore,omitempty"`
+	Auto    bool     `yaml:"auto,omitempty"`
 }
 
 type Config struct {
@@ -42,7 +44,9 @@ func ReadConfig(filename string) {
 		},
 		Disk: DiskConfig{
 			MaxDisk: 90.0,
-			Paths:   []string{"/"},
+			Paths:   []string{},
+			Ignore:  []string{},
+			Auto:    true,
 		},
 	}
 

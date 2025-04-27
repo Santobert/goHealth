@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"slices"
 
 	"github.com/Santobert/gohealth/internal/config"
 	"github.com/shirou/gopsutil/v4/disk"
@@ -48,14 +49,39 @@ func addPartitionUsage(diskUsage *DiskUsage, path string) error {
 	return nil
 }
 
+func getAllPartitions() ([]string, error) {
+	partitions, err := disk.Partitions(false)
+	if err != nil {
+		return nil, err
+	}
+	var partitionsList []string
+	for _, partition := range partitions {
+		if !slices.Contains(config.AppConfig.Disk.Ignore, partition.Mountpoint) {
+			partitionsList = append(partitionsList, partition.Mountpoint)
+		}
+	}
+	return partitionsList, nil
+
+}
+
 func DiskUsageHandler(w http.ResponseWriter, r *http.Request) {
 	diskUsage := &DiskUsage{
 		Healthy: true,
 		Paths:   make(map[string]*Partition),
 	}
 
-	// Handle all paths configured in the config
-	for _, path := range config.AppConfig.Disk.Paths {
+	paths := []string{}
+	if config.AppConfig.Disk.Auto {
+		if autoPaths, err := getAllPartitions(); err != nil {
+			log.Printf("Error retrieving partitions: %v", err)
+		} else {
+			paths = autoPaths
+		}
+	} else {
+		paths = config.AppConfig.Disk.Paths
+	}
+
+	for _, path := range paths {
 		if err := addPartitionUsage(diskUsage, path); err != nil {
 			log.Printf("Error retrieving disk usage for path %s: %v", path, err)
 			diskUsage.Paths[path] = nil

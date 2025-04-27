@@ -34,10 +34,12 @@ An example configuration can be found [here](examples/config.yaml).
 2. `memory`
    - `max_memory`: Sets the maximum percentage of physical memory usage allowed.
    - `max_swap`: Sets the maximum percentage of swap memory usage allowed.
-   - `swap_enabled`: Enables the swap healthcheck. Default is true.
+   - `swap_enabled`: Enables the swap healthcheck. Default is `true`.
 3. `disk`
    - `max_disk`: Defines the maximum percentage of disk usage allowed.
    - `paths`: Lists the directories or mount points to monitor for disk usage.
+   - `ignore`: Specifies paths to be excluded from auto-discovery.
+   - `auto`: Enable auto-discovery of physical partitions for disk checking. Default is `true`.
 
 ## Deployment
 
