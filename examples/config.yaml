@@ -8,7 +8,6 @@ memory:
 
 disk:
   max_disk: 80.0
-  paths: []
   ignore:
     - /boot/efi
   auto: true

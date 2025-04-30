@@ -8,47 +8,49 @@ import (
 )
 
 type LoadConfig struct {
-	MaxLoad float64 `yaml:"max_load,omitempty"`
+	MaxLoad float64 `yaml:"max_load"`
 }
 
 type MemoryConfig struct {
-	MaxMemory   float64 `yaml:"max_memory,omitempty"`
-	MaxSwap     float64 `yaml:"max_swap,omitempty"`
-	SwapEnabled bool    `yaml:"swap_enabled,omitempty"`
+	MaxMemory   float64 `yaml:"max_memory"`
+	MaxSwap     float64 `yaml:"max_swap"`
+	SwapEnabled bool    `yaml:"swap_enabled"`
 }
 
 type DiskConfig struct {
-	MaxDisk float64  `yaml:"max_disk,omitempty"`
-	Paths   []string `yaml:"paths,omitempty"`
-	Ignore  []string `yaml:"ignore,omitempty"`
-	Auto    bool     `yaml:"auto,omitempty"`
+	MaxDisk float64  `yaml:"max_disk"`
+	Paths   []string `yaml:"paths"`
+	Ignore  []string `yaml:"ignore"`
+	Auto    bool     `yaml:"auto"`
 }
 
 type Config struct {
-	Load   LoadConfig   `yaml:"load,omitempty"`
-	Memory MemoryConfig `yaml:"memory,omitempty"`
-	Disk   DiskConfig   `yaml:"disk,omitempty"`
+	Load   LoadConfig   `yaml:"load"`
+	Memory MemoryConfig `yaml:"memory"`
+	Disk   DiskConfig   `yaml:"disk"`
 }
 
 var AppConfig Config
 
+var defaultConfig = Config{
+	Load: LoadConfig{
+		MaxLoad: 1.0,
+	},
+	Memory: MemoryConfig{
+		MaxMemory:   90.0,
+		MaxSwap:     90.0,
+		SwapEnabled: true,
+	},
+	Disk: DiskConfig{
+		MaxDisk: 90.0,
+		Paths:   []string{},
+		Ignore:  []string{},
+		Auto:    true,
+	},
+}
+
 func ReadConfig(filename string) {
-	AppConfig = Config{
-		Load: LoadConfig{
-			MaxLoad: 1.0,
-		},
-		Memory: MemoryConfig{
-			MaxMemory:   90.0,
-			MaxSwap:     90.0,
-			SwapEnabled: true,
-		},
-		Disk: DiskConfig{
-			MaxDisk: 90.0,
-			Paths:   []string{},
-			Ignore:  []string{},
-			Auto:    true,
-		},
-	}
+	AppConfig = defaultConfig
 
 	if filename == "" {
 		log.Println("No configuration file provided, using default values.")
