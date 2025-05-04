@@ -24,10 +24,15 @@ type DiskConfig struct {
 	Auto    bool     `yaml:"auto"`
 }
 
+type SystemdConfig struct {
+	Enabled bool `yaml:"enabled"`
+}
+
 type Config struct {
-	Load   LoadConfig   `yaml:"load"`
-	Memory MemoryConfig `yaml:"memory"`
-	Disk   DiskConfig   `yaml:"disk"`
+	Load    LoadConfig    `yaml:"load"`
+	Memory  MemoryConfig  `yaml:"memory"`
+	Disk    DiskConfig    `yaml:"disk"`
+	Systemd SystemdConfig `yaml:"systemd"`
 }
 
 var AppConfig Config
@@ -46,6 +51,9 @@ var defaultConfig = Config{
 		Paths:   []string{},
 		Ignore:  []string{},
 		Auto:    true,
+	},
+	Systemd: SystemdConfig{
+		Enabled: true,
 	},
 }
 

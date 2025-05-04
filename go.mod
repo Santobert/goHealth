@@ -6,9 +6,12 @@ require github.com/shirou/gopsutil/v4 v4.25.3
 
 require gopkg.in/yaml.v2 v2.4.0
 
+require github.com/coreos/go-systemd/v22 v22.5.0
+
 require (
 	github.com/ebitengine/purego v0.8.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
