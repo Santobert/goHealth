@@ -24,6 +24,9 @@ func TestReadConfig_DefaultValues(t *testing.T) {
 			Ignore:  []string{},
 			Auto:    true,
 		},
+		Systemd: config.SystemdConfig{
+			Enabled: true,
+		},
 	}
 
 	if !reflect.DeepEqual(config.AppConfig, expectedConfig) {
@@ -47,6 +50,9 @@ func TestReadConfig_FromFile(t *testing.T) {
 			Paths:   []string{"/", "/home"},
 			Ignore:  []string{"/boot/efi"},
 			Auto:    false,
+		},
+		Systemd: config.SystemdConfig{
+			Enabled: false,
 		},
 	}
 

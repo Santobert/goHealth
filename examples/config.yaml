@@ -11,3 +11,6 @@ disk:
   ignore:
     - /boot/efi
   auto: true
+
+systemd:
+  enabled: true

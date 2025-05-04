@@ -27,9 +27,9 @@ func isSwapEnabled() bool {
 }
 
 func addSwapHealth(memoryUsage *MemoryUsage) error {
-	swapUsage, swapErr := mem.SwapMemory()
-	if swapErr != nil {
-		return swapErr
+	swapUsage, err := mem.SwapMemory()
+	if err != nil {
+		return err
 	}
 	swapHealthy := isSwapHealthy(swapUsage.UsedPercent)
 	memoryUsage.SwapPercent = swapUsage.UsedPercent
@@ -52,12 +52,12 @@ func MemoryUsageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isSwapEnabled() {
-		if err := addSwapHealth(&memMsg); err != nil {
+		if swpErr := addSwapHealth(&memMsg); swpErr != nil {
 			http.Error(w, "Failed to retrieve swap memory usage information", http.StatusInternalServerError)
 			return
 		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&memMsg)
+	json.NewEncoder(w).Encode(memMsg)
 }
