@@ -40,6 +40,8 @@ An example configuration can be found [here](examples/config.yaml).
    - `paths`: Lists the directories or mount points to monitor for disk usage.
    - `ignore`: Specifies paths to be excluded from auto-discovery.
    - `auto`: Enable auto-discovery of physical partitions for disk checking. Default is `true`.
+4. `systemd`
+   - `enabled`: Enables or disables systemd service health checks. Default is `true`.
 
 ## Deployment
 
