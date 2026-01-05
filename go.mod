@@ -2,7 +2,7 @@ module github.com/Santobert/gohealth
 
 go 1.24.0
 
-require github.com/shirou/gopsutil/v4 v4.25.11
+require github.com/shirou/gopsutil/v4 v4.25.12
 
 require gopkg.in/yaml.v2 v2.4.0
 
