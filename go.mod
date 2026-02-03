@@ -6,7 +6,7 @@ require github.com/shirou/gopsutil/v4 v4.25.11
 
 require gopkg.in/yaml.v2 v2.4.0
 
-require github.com/coreos/go-systemd/v22 v22.6.0
+require github.com/coreos/go-systemd/v22 v22.7.0
 
 require (
 	github.com/ebitengine/purego v0.9.1 // indirect
